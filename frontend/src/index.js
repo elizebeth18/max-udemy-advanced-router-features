@@ -6,9 +6,9 @@ import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import RootLayout from './components/RootLayout';
 import Home from './components/pages/HomePage';
-import Events, { loader as eventsLoader }  from './components/pages/EventsPage';
-import EventDetail, {loader as eventDetailLoader} from './components/pages/EventDetailPage';
-import NewEvent from './components/pages/NewEventPage';
+import Events, { loader as eventsLoader } from './components/pages/EventsPage';
+import EventDetail, { loader as eventDetailLoader } from './components/pages/EventDetailPage';
+import NewEvent, { action as formSubmitAction } from './components/pages/NewEventPage';
 import EditEvent from './components/pages/EditEventPage';
 import EventsRootLayout from './components/pages/EventsRoot';
 import ErrorPage from './components/pages/ErrorPage';
@@ -25,14 +25,27 @@ const router = createBrowserRouter([
         element: <EventsRootLayout />,
         children: [
           {
-            index: true, element: <Events />, loader: eventsLoader
+            index: true,
+            element: <Events />,
+            loader: eventsLoader
           },
-          { path: ':eventId', 
-            element: <EventDetail />, 
+          {
+            path: ':eventId',
+            id: 'event-detail',
             loader: eventDetailLoader,
+            children: [
+              {
+                index: true,
+                element: <EventDetail />,
+              },
+              { path: 'edit', element: <EditEvent /> },
+            ]
           },
-          { path: 'new', element: <NewEvent /> },
-          { path: ':eventId/edit', element: <EditEvent /> },
+          {
+            path: 'new',
+            element: <NewEvent />,
+            action: formSubmitAction,
+          },
         ]
       },
     ]
